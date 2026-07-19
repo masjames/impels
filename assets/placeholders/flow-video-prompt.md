@@ -35,7 +35,7 @@ clock badge ticks once. Cut/morph to the same task at center emitting repeating 
 ticks outward at even intervals (the nag rhythm), each stronger than the last. A faint off-white
 ghost of the task behind it stops fading and snaps back. Final tick lands as an amber checkmark;
 the task marks done.
-End beat (last ~1.5s): everything clears to the deep slate; the intervval timer mark (circle with
+End beat (last ~1.5s): everything clears to the deep slate; the impels timer mark (circle with
 an "i" inside) draws on in amber at center.
 Motion: drop + tick, rhythmic pulses, checkmark pop, clean logo draw-on. ~8 seconds.
 ```

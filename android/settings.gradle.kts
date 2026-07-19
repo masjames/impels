@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "intervval"
+rootProject.name = "impels"
 include(":app")
