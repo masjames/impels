@@ -6,7 +6,7 @@ Each uses a solid deep-slate background so the set stays cohesive with the dark 
 ---
 
 ## Prompt 1 — `coworker-interrupt.png`
-Card: "Coworker asks mid-task" — an ask arrives while you're deep in focus; intervval catches it.
+Card: "Coworker asks mid-task" — an ask arrives while you're deep in focus; impels catches it.
 
 ```
 Flat vector editorial illustration, 4:3, centered, minimal with generous negative space.
@@ -35,7 +35,7 @@ Mood: focused, calm but alert, tactile and reliable.
 ```
 
 ## Prompt 3 — `do-it-in-a-bit.png`
-Card: "'I'll do it in a bit'" — without repeat nudges a task fades; intervval pings on an interval until done.
+Card: "'I'll do it in a bit'" — without repeat nudges a task fades; impels pings on an interval until done.
 
 ```
 Flat vector editorial illustration, 4:3, centered, minimal with generous negative space.

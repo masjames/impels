@@ -1,7 +1,7 @@
-# AGENTS.md — intervval Android
+# AGENTS.md — impels Android
 
-You are working on the **intervval** Android app (offline-first reminder app that nags on an
-interval until a task is marked done). Read `../intervval-BUILD-SPEC.md` for the full spec and
+You are working on the **impels** Android app (offline-first reminder app that nags on an
+interval until a task is marked done). Read `../impels-BUILD-SPEC.md` for the full spec and
 `../index.html` for the visual/copy reference.
 
 ## State of the code

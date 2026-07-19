@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "app.intervval"
+    namespace = "app.impels"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "app.intervval"
+        applicationId = "app.impels"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

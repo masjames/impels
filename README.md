@@ -1,8 +1,8 @@
-# intervval
+# impels
 
-Android reminder app for interrupted people. **Catch every ask. Stay focused. Get nagged until it's done.**
+Android reminder app for interrupted people. **Catch every ask. Set a timer you can't ignore.**
 
-Unlike a to-do app that reminds once, intervval keeps nagging on an interval (every X minutes) until you mark the task done.
+Catch a task in two taps, pick a time, and impels rings like a full-screen alarm (sound + vibration, over the lock screen) until you dismiss or snooze it. A one-shot timer, not a recurring nag.
 
 This repo holds two things: the **marketing landing page** (deployed to Vercel) and the **build spec** for the Android app.
 
@@ -10,9 +10,9 @@ This repo holds two things: the **marketing landing page** (deployed to Vercel) 
 
 ## For the coding agent (opencode + DeepSeek): READ THIS FIRST
 
-**Your job:** build the intervval Android app and produce a working debug APK.
+**Your job:** build the impels Android app and produce a working debug APK.
 
-1. **Read `intervval-BUILD-SPEC.md` in full.** It is the single source of truth. Every decision
+1. **Read `impels-BUILD-SPEC.md` in full.** It is the single source of truth. Every decision
    (tech stack, versions, architecture, data model, screens, scheduling logic, permissions, theme,
    copy) is already made there. Do not invent features that are not in it.
 2. **Build the Android project** in a new folder `android/` at the repo root, following the exact
@@ -41,7 +41,7 @@ index.html                 # landing page (Vercel deploys this at repo root)
 shared/                    # landing CSS (tokens.css, shadcn.css)
 assets/images/             # landing illustrations (webp)
 assets/placeholders/       # image + video generation prompts (nanobanana, Google Flow)
-intervval-BUILD-SPEC.md    # THE spec for the Android app — build from this
+impels-BUILD-SPEC.md    # THE spec for the Android app — build from this
 PRE-LANDING.md             # early copy/structure notes for the landing page
 STYLE-NOTES.md             # landing design system notes
 android/                   # (to be created by the build agent) the Android app
@@ -50,9 +50,9 @@ android/                   # (to be created by the build agent) the Android app
 ## APK distribution
 The app is **not built locally by users**. We publish the APK as a GitHub Release; the landing page
 links to it:
-`https://github.com/masjames/intervval/releases/latest/download/intervval.apk`
+`https://github.com/masjames/impels/releases/latest/download/impels.apk`
 
-Build agent / maintainer: after building, attach the APK to a GitHub Release named `intervval.apk`
+Build agent / maintainer: after building, attach the APK to a GitHub Release named `impels.apk`
 so the download button on the site resolves.
 
 ## Landing page deploy (Vercel)
