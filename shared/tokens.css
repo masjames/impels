@@ -1,0 +1,74 @@
+/* Per-variant design tokens for intervvval landing scaffolds.
+   Apply ONE theme class on <html>. One system, swap vars (playbook §5).
+   Fonts via Fontshare (distinctive, not the Inter/Roboto/Fraunces AI-default set).
+   Hover = LIGHTER than base. No purple/blue gradient palettes (ban list). */
+
+/* danger action color shared by all themes (link-style, never a filled button) */
+:root { --danger: #d1491f; --danger-hover: #e8663b; }
+
+/* ---------- v1: Focused ----------
+   Built for someone working heavily. Crisp bright surface, near-black ink,
+   HIGH contrast, one confident signal-green accent. Alert, tactile, not sleepy. */
+.theme-focus {
+  --bg: #fbfbf9;          /* crisp bright, not muddy */
+  --fg: #101311;          /* near-black ink, high contrast */
+  --muted-bg: #eef0ec;
+  --muted-fg: #565c54;
+  --card: #ffffff;
+  --border: #d7dad2;
+  --primary: #0f7a45;     /* signal green */
+  --primary-hover: #16a05c; /* LIGHTER on hover */
+  --primary-fg: #ffffff;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --font-head: "Clash Display", system-ui, sans-serif;
+  --font-body: "General Sans", system-ui, sans-serif;
+  --head-weight: 600;
+}
+/* focus-mode band: invert to dark, keep green signal */
+.theme-focus .invert {
+  --bg: #0f1512; --fg: #f2f4f0; --muted-bg: #17201b; --muted-fg: #9aa69d;
+  --card: #141b17; --border: #263029; --primary: #2bd07e; --primary-hover: #55e09b; --primary-fg: #0f1512;
+  background: var(--bg); color: var(--fg);
+}
+
+/* ---------- v2: Indie Warm ----------
+   Off-white, approachable, terracotta accent, rounder. */
+.theme-warm {
+  --bg: #fbfaf8;
+  --fg: #211f1d;
+  --muted-bg: #f1efea;
+  --muted-fg: #6f6a63;
+  --card: #ffffff;
+  --border: #e6e2da;
+  --primary: #d0501f;     /* terracotta */
+  --primary-hover: #e86f3f; /* LIGHTER on hover */
+  --primary-fg: #ffffff;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --font-head: "Cabinet Grotesk", system-ui, sans-serif;
+  --font-body: "Satoshi", system-ui, sans-serif;
+  --head-weight: 800;
+}
+
+/* ---------- v3: High Accessibility ----------
+   Dark, made for night + low-vision use. Max readability: high contrast text,
+   large-friendly sizing, legible sans (no serif), amber signal accent. */
+.theme-a11y {
+  --bg: #0d1014;          /* deep slate ground */
+  --fg: #f4f3ef;          /* very high-contrast text */
+  --muted-bg: #181c23;
+  --muted-fg: #b6bcc4;    /* still passes contrast, not faint */
+  --card: #141922;
+  --border: #303845;      /* clearly visible borders */
+  --primary: #f0a63a;     /* bright amber signal, strong on dark */
+  --primary-hover: #ffbe5c; /* LIGHTER on hover */
+  --primary-fg: #14110a;  /* dark ink on amber = high contrast */
+  --radius: 6px;
+  --radius-lg: 10px;
+  --font-head: "Clash Grotesk", system-ui, sans-serif; /* legible sans, no serif */
+  --font-body: "Switzer", system-ui, sans-serif;
+  --head-weight: 600;
+  --danger: #ff8163;      /* brighter danger for dark bg */
+  --danger-hover: #ffa088;
+}

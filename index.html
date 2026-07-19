@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-a11y">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>intervval · catch every ask, stay focused, get nagged until it's done</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@500,600&f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared/tokens.css" />
+  <link rel="stylesheet" href="shared/shadcn.css" />
+  <script src="https://fast.wistia.com/player.js" async></script>
+  <script src="https://fast.wistia.com/embed/7chhqrosi9.js" async type="module"></script>
+  <style>wistia-player[media-id='7chhqrosi9']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/7chhqrosi9/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style>
+  <style>
+    /* v3 High Accessibility: video hero + card grid, dark high-contrast */
+    .hero { text-align:center; padding:3rem 0; border-bottom:1px solid var(--border); }
+    .hero .lead { margin:1rem auto 0; }
+    .video-wrap { max-width:820px; margin:0 auto 2rem; border-radius:var(--radius-lg); overflow:hidden; }
+    .cat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .article {
+      background:var(--muted-bg); border:1px solid var(--border); border-radius:var(--radius-lg);
+      padding:1rem; transition:background .15s ease, color .15s ease, border-color .15s ease;
+    }
+    .card-img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:var(--radius);
+      display:block; margin-bottom:.85rem; background:#0d1014; }
+    /* hover: flip to light surface with dark text */
+    .article:hover { background:#f4f2ec; border-color:#f4f2ec; color:#14110a; }
+    .article:hover h3, .article:hover .body { color:#14110a; }
+    @media(max-width:820px){ .cat-grid{grid-template-columns:1fr;} }
+    /* a11y: strong visible focus ring on every interactive element */
+    a:focus-visible, .input:focus-visible, summary:focus-visible { outline:3px solid var(--primary); outline-offset:2px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <header class="site-header">
+      <a class="logo" href="#top">
+        <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="9" y1="2.5" x2="15" y2="2.5" /><line x1="12" y1="2.5" x2="12" y2="4.5" />
+          <circle cx="12" cy="14" r="8" />
+          <circle cx="12" cy="10.5" r="0.6" fill="currentColor" stroke="none" />
+          <line x1="12" y1="12.5" x2="12" y2="17" />
+        </svg>
+        <span>intervval</span>
+      </a>
+      <nav class="nav">
+        <a href="#faq">FAQ</a>
+        <a href="#get" class="btn btn-primary">Download</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="video-wrap"><wistia-player media-id="7chhqrosi9" aspect="1.7777777777777777"></wistia-player></div>
+      <h1>Catch every ask.<br /> Get nagged until it's done.</h1>
+      <p class="lead">Coworker pings, boss drops a task, you're mid-focus. Two taps to catch it, then reminders on repeat.</p>
+      <a href="https://github.com/masjames/intervval/releases/latest/download/intervval.apk" class="btn btn-primary" style="margin-top:1.5rem;">Download the beta (APK)</a>
+      <p class="small" style="margin-top:.6rem;">Android only · free beta · sideload the APK</p>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="section" id="field">
+      <h2>Your head is not a reliable queue.</h2>
+      <div class="cat-grid" style="margin-top:1.5rem;">
+        <article class="article"><img class="card-img" src="assets/images/coworker-interrupt.webp" alt="A person deep in focus at a laptop while a coworker's request is caught mid-air" /><h3>Coworker asks mid-task</h3><p class="body">Catch it before it evaporates. Two taps, back to work.</p></article>
+        <article class="article"><img class="card-img" src="assets/images/boss-drops-task.webp" alt="A hand dropping a task card into a queue tray marked with a clock" /><h3>Boss drops a task</h3><p class="body">Park it. Get nagged at the right interval.</p></article>
+        <article class="article"><img class="card-img" src="assets/images/do-it-in-a-bit.webp" alt="A task pulsing with repeating reminders until it lands a checkmark" /><h3>"I'll do it in a bit"</h3><p class="body">A bit becomes never. Kept in front of you until done.</p></article>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="section" id="get">
+      <h2>Want it to stop slipping through?</h2>
+      <p class="lead" style="margin-top:.5rem;">Grab the beta and start catching every ask.</p>
+      <a href="https://github.com/masjames/intervval/releases/latest/download/intervval.apk" class="btn btn-primary" style="margin-top:1rem;">Download the beta (APK)</a>
+      <p class="small" style="margin-top:.6rem;">Android only · free while in beta · you may need to allow install from unknown sources.</p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section accordion" id="faq">
+      <h2 style="margin-bottom:1rem;">Questions</h2>
+      <details open><summary>How is this different from a to-do app?</summary><p>To-do apps remind once. intervval keeps nagging until it's done.</p></details>
+      <details><summary>Will reminders survive background app killing?</summary><p>Exact alarms + foreground service so nags don't silently die.</p></details>
+      <details><summary>Is it Android only?</summary><p>Yes for now. Android first, where reliable background reminders are strongest.</p></details>
+      <details><summary>How do I install the APK?</summary><p>Download it, tap the file, and allow install from unknown sources if your phone asks. It is a free beta.</p></details>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <span class="logo"><svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="9" y1="2.5" x2="15" y2="2.5"/><line x1="12" y1="2.5" x2="12" y2="4.5"/><circle cx="12" cy="14" r="8"/><circle cx="12" cy="10.5" r="0.6" fill="currentColor" stroke="none"/><line x1="12" y1="12.5" x2="12" y2="17"/></svg><span>intervval</span></span>
+      <span class="small">by <a href="https://instagram.com/0xruzk" target="_blank" rel="noopener">0xruzk</a></span>
+    </footer>
+
+  </div>
+</body>
+</html>
