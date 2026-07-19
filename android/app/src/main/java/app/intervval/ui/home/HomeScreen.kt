@@ -1,27 +1,35 @@
 package app.intervval.ui.home
 
+import android.Manifest
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.intervval.domain.IntervalOption
-import app.intervval.domain.Reminder
+import app.intervval.ui.components.PermissionBanner
+import app.intervval.ui.components.SectionLabel
 
-/**
- * Functional Home/Focus screen. DeepSeek: elevate to spec §10.1 visuals
- * (bigger focus card, who-chips, Done section polish) without changing the VM API.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -32,11 +40,35 @@ fun HomeScreen(
     onSettings: () -> Unit
 ) {
     val state by vm.state.collectAsState()
+    val context = LocalContext.current
+
+    var exactDismissed by remember { mutableStateOf(false) }
+    val needsExact = !exactDismissed && Build.VERSION.SDK_INT >= 31 &&
+        !(context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms()
+    var notifDismissed by remember { mutableStateOf(false) }
+    val needsNotif = !notifDismissed && Build.VERSION.SDK_INT >= 33 &&
+        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+
+    var doneExpanded by remember { mutableStateOf(false) }
+
+    val showActive = state.focused != null || state.queue.isNotEmpty()
+    val showEmpty = !showActive && state.done.isEmpty()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("intervval") },
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Filled.Notifications,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(22.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text("intervval", fontWeight = FontWeight.Bold)
+                    }
+                },
                 actions = {
                     IconButton(onClick = onSettings) {
                         Icon(Icons.Filled.Settings, contentDescription = "Settings")
@@ -47,130 +79,189 @@ fun HomeScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onAdd,
-                icon = { Icon(Icons.Filled.Add, contentDescription = "Add reminder") },
+                icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                 text = { Text("Get it down") }
             )
         }
     ) { padding ->
-        if (state.focused == null && state.queue.isEmpty() && state.done.isEmpty()) {
-            EmptyState(Modifier.padding(padding))
-            return@Scaffold
-        }
-
         LazyColumn(
             modifier = Modifier.padding(padding).fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            if (needsExact) {
+                item(key = "b_exact") {
+                    PermissionBanner(
+                        message = "Turn on exact alarms so reminders fire on time.",
+                        onDismiss = { exactDismissed = true },
+                        actionLabel = "Fix",
+                        onAction = {
+                            context.startActivity(
+                                Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                            )
+                        }
+                    )
+                }
+            }
+            if (needsNotif) {
+                item(key = "b_notif") {
+                    PermissionBanner(
+                        message = "Notifications are off. Turn them on to get nagged.",
+                        onDismiss = { notifDismissed = true },
+                        actionLabel = "Fix",
+                        onAction = {
+                            context.startActivity(
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                    data = Uri.parse("package:${context.packageName}")
+                                }
+                            )
+                        }
+                    )
+                }
+            }
+
+            if (showEmpty) {
+                item(key = "empty") {
+                    Box(Modifier.fillParentMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "Nothing on your plate.\nCatch the next ask.",
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(Modifier.height(24.dp))
+                            Button(onClick = onAdd) { Text("Get it down") }
+                        }
+                    }
+                }
+                return@LazyColumn
+            }
+
             state.focused?.let { f ->
-                item {
-                    FocusedCard(
-                        reminder = f,
-                        onDone = { vm.markDone(f.id) },
-                        onSnooze = { vm.snooze(f.id, defaultSnooze) },
-                        onEdit = { onEdit(f.id) },
-                        onUnfocus = { vm.clearFocus() }
-                    )
+                item(key = "focused") {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        )
+                    ) {
+                        Column(
+                            Modifier.padding(20.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().height(3.dp),
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = MaterialTheme.shapes.extraSmall
+                            ) {}
+                            Text(
+                                f.title,
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            f.fromWho?.let {
+                                AssistChip(onClick = {}, label = { Text("From $it") })
+                            }
+                            Text(
+                                IntervalOption.fromMinutes(f.intervalMinutes).label,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Button(onClick = { vm.markDone(f.id) }) { Text("Done") }
+                                TextButton(onClick = { vm.snooze(f.id, defaultSnooze) }) {
+                                    Text("Snooze")
+                                }
+                                TextButton(onClick = { vm.clearFocus() }) { Text("Unfocus") }
+                                TextButton(onClick = { onEdit(f.id) }) { Text("Edit") }
+                            }
+                        }
+                    }
                 }
             }
+
             if (state.queue.isNotEmpty()) {
-                item { SectionLabel("Up next") }
+                item(key = "queue_header") { SectionLabel("Up next") }
                 items(state.queue, key = { it.id }) { r ->
-                    ReminderRow(
-                        reminder = r,
+                    Card(
                         onClick = { onEdit(r.id) },
-                        onFocus = { vm.setFocus(r.id) },
-                        onDone = { vm.markDone(r.id) }
-                    )
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            Modifier.padding(16.dp).fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                Text(
+                                    r.title,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                val sub = buildString {
+                                    r.fromWho?.let { append("From $it · ") }
+                                    append(IntervalOption.fromMinutes(r.intervalMinutes).label)
+                                }
+                                Text(
+                                    sub,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            IconButton(onClick = { vm.setFocus(r.id) }) {
+                                Icon(
+                                    Icons.Outlined.StarBorder,
+                                    contentDescription = "Focus"
+                                )
+                            }
+                            TextButton(onClick = { vm.markDone(r.id) }) { Text("Done") }
+                        }
+                    }
                 }
             }
+
             if (state.done.isNotEmpty()) {
-                item { SectionLabel("Done") }
-                items(state.done, key = { "done-${it.id}" }) { r ->
-                    DoneRow(reminder = r, onRestore = { vm.restore(r.id) }, onDelete = { vm.delete(r.id) })
+                item(key = "done_header") {
+                    TextButton(
+                        onClick = { doneExpanded = !doneExpanded },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            if (doneExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                            contentDescription = if (doneExpanded) "Collapse" else "Expand",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            "Done (${state.done.size})",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(Modifier.weight(1f))
+                    }
+                }
+                if (doneExpanded) {
+                    items(state.done, key = { it.id }) { r ->
+                        Row(
+                            Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                r.title,
+                                Modifier.weight(1f),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            TextButton(onClick = { vm.restore(r.id) }) { Text("Restore") }
+                            TextButton(onClick = { vm.delete(r.id) }) {
+                                Text("Delete", color = MaterialTheme.colorScheme.error)
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SectionLabel(text: String) {
-    Text(
-        text = text.uppercase(),
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(top = 8.dp)
-    )
-}
-
-@Composable
-private fun FocusedCard(
-    reminder: Reminder,
-    onDone: () -> Unit,
-    onSnooze: () -> Unit,
-    onEdit: () -> Unit,
-    onUnfocus: () -> Unit
-) {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("FOCUS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
-            Text(reminder.title, style = MaterialTheme.typography.headlineSmall)
-            reminder.fromWho?.let { AssistChip(onClick = {}, label = { Text("From $it") }) }
-            Text(IntervalOption.fromMinutes(reminder.intervalMinutes).label, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = onDone) { Text("Done") }
-                TextButton(onClick = onSnooze) { Text("Snooze") }
-                TextButton(onClick = onEdit) { Text("Edit") }
-                TextButton(onClick = onUnfocus) { Text("Unfocus") }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ReminderRow(
-    reminder: Reminder,
-    onClick: () -> Unit,
-    onFocus: () -> Unit,
-    onDone: () -> Unit
-) {
-    Card(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
-        Row(
-            Modifier.padding(16.dp).fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(Modifier.weight(1f)) {
-                Text(reminder.title, style = MaterialTheme.typography.titleMedium)
-                val sub = buildString {
-                    reminder.fromWho?.let { append("From $it · ") }
-                    append(IntervalOption.fromMinutes(reminder.intervalMinutes).label)
-                }
-                Text(sub, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            IconButton(onClick = onFocus) { Icon(Icons.Outlined.StarBorder, contentDescription = "Focus") }
-            TextButton(onClick = onDone) { Text("Done") }
-        }
-    }
-}
-
-@Composable
-private fun DoneRow(reminder: Reminder, onRestore: () -> Unit, onDelete: () -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(reminder.title, Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurfaceVariant)
-        TextButton(onClick = onRestore) { Text("Restore") }
-        TextButton(onClick = onDelete) { Text("Delete", color = MaterialTheme.colorScheme.error) }
-    }
-}
-
-@Composable
-private fun EmptyState(modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
-        Text(
-            "Nothing on your plate. Catch the next ask.",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }
