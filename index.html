@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="theme-a11y">
+<html lang="id" class="theme-a11y">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>impels · catch every ask, stay focused, get nagged until it's done</title>
+  <title data-i18n="meta_title">impels · catch every ask, stay focused, get nagged until it's done</title>
   <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@500,600&f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="shared/tokens.css" />
   <link rel="stylesheet" href="shared/shadcn.css" />
@@ -18,7 +18,6 @@
       background:var(--muted-bg); border:1px solid var(--border); border-radius:var(--radius-lg);
       padding:1rem; transition:background .15s ease, color .15s ease, border-color .15s ease;
     }
-    /* screens: 2-column grid */
     .screens-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
     .article-h { display:flex; align-items:center; gap:1.5rem; padding:1rem; }
     .card-img-phone { width:130px; height:auto; flex-shrink:0; border-radius:var(--radius);
@@ -26,21 +25,37 @@
     .article-body { flex:1; }
     .article-h:hover { background:#1e2530; border-color:var(--border); }
     @media(max-width:640px){ .screens-grid{grid-template-columns:1fr;} .article-h{flex-direction:column;text-align:center;} .card-img-phone{width:110px;} }
-    /* lightbox */
     .lightbox { display:none; position:fixed; top:0; left:0; right:0; bottom:0;
       background:rgba(0,0,0,.85); z-index:9999; align-items:center; justify-content:center;
       cursor:pointer; }
     .lightbox.open { display:flex; }
     .lightbox img { max-width:90vw; max-height:90vh; border-radius:var(--radius);
       box-shadow:0 8px 40px rgba(0,0,0,.5); }
-    /* a11y: strong visible focus ring on every interactive element */
+
+    .lang-btn {
+      position:relative; cursor:pointer; display:inline-flex; align-items:center; gap:0.2rem;
+      font-family:var(--font-body); font-size:0.8rem; font-weight:600;
+      padding:0.2rem 0.5rem; border:1px solid var(--border); border-radius:var(--radius);
+      background:var(--card); color:var(--fg); user-select:none;
+    }
+    .lang-btn:hover { background:var(--muted-bg); }
+    .lang-menu {
+      display:none; position:absolute; top:100%; right:0; margin-top:2px;
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius); z-index:100; min-width:50px;
+    }
+    .lang-btn.open .lang-menu { display:block; }
+    .lang-menu div {
+      padding:0.3rem 0.6rem; cursor:pointer; font-size:0.8rem; font-weight:600;
+    }
+    .lang-menu div:hover { background:var(--muted-bg); }
+    .lang-menu div.active { background:var(--primary); color:var(--primary-fg); }
+
     a:focus-visible, .input:focus-visible, summary:focus-visible { outline:3px solid var(--primary); outline-offset:2px; }
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- HEADER -->
     <header class="site-header">
       <a class="logo" href="#top">
         <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -52,97 +67,161 @@
         <span>impels</span>
       </a>
       <nav class="nav">
-        <a href="#faq">FAQ</a>
-        <a href="#get" class="btn btn-primary">Download</a>
+        <a href="#faq" data-i18n="nav_faq">FAQ</a>
+        <a href="#get" class="btn btn-primary" data-i18n="nav_download">Download</a>
+        <div class="lang-btn" id="langBtnTop" tabindex="0" role="button" aria-haspopup="true" onclick="toggleLang(this)">
+          <span class="lang-label">ID</span>
+          <span>▼</span>
+          <div class="lang-menu">
+            <div class="active" data-lang="id" onclick="switchLang('id');event.stopPropagation();">ID</div>
+            <div data-lang="en" onclick="switchLang('en');event.stopPropagation();">EN</div>
+          </div>
+        </div>
       </nav>
     </header>
 
-    <!-- HERO -->
     <section class="hero" id="top">
       <div class="video-wrap"><wistia-player media-id="7chhqrosi9" aspect="1.7777777777777777"></wistia-player></div>
-      <h1>Catch and set a timer.</h1>
-      <p class="lead">Coworker pings, boss drops a task, you're mid-focus. Catch it in two taps, pick a time, and it rings like an alarm until you deal with it.</p>
-      <a href="https://github.com/masjames/impels/releases/latest/download/impels.apk" class="btn btn-primary" style="margin-top:1.5rem;">Download the beta (APK)</a>
-      <p class="small" style="margin-top:.6rem;">Android only · free beta · sideload the APK</p>
+      <h1 data-i18n="hero_title">Catch and set a timer.</h1>
+      <p class="lead" data-i18n="hero_sub">Coworker pings, boss drops a task, you're mid-focus. Catch it in two taps, pick a time, and it rings like an alarm until you deal with it.</p>
+      <a href="https://github.com/masjames/impels/releases/latest/download/impels.apk" class="btn btn-primary" style="margin-top:1.5rem;" data-i18n="hero_cta">Download the beta (APK)</a>
+      <p class="small" style="margin-top:.6rem;" data-i18n="hero_note">Android only · free beta · sideload the APK</p>
     </section>
 
-    <!-- PROBLEM -->
     <section class="section" id="field">
-      <h2>Your head is not a reliable queue.</h2>
+      <h2 data-i18n="section1_title">Your head is not a reliable queue.</h2>
       <div class="screens-grid" style="margin-top:1.5rem;">
         <article class="article article-h">
-          <img class="card-img-phone" src="captures/home-empty.png" alt="Empty home screen ready to catch an ask" />
+          <img class="card-img-phone" src="captures/home-empty.png" alt="" />
           <div class="article-body">
-            <h3>Catch it fast</h3>
-            <p class="body">Open the app and you're two taps away from capturing whatever just came up.</p>
+            <h3 data-i18n="card1_title">Catch it fast</h3>
+            <p class="body" data-i18n="card1_body">Open the app and you're two taps away from capturing whatever just came up.</p>
           </div>
         </article>
         <article class="article article-h">
-          <img class="card-img-phone" src="captures/add-form-filled.png" alt="Add reminder form filled with 'Review Q3 report' from 'Boss'" />
+          <img class="card-img-phone" src="captures/add-form-filled.png" alt="" />
           <div class="article-body">
-            <h3>Coworker asks, boss drops</h3>
-            <p class="body">Park it, pick a time, back to focus. It rings when you asked it to.</p>
+            <h3 data-i18n="card2_title">Coworker asks, boss drops</h3>
+            <p class="body" data-i18n="card2_body">Park it, pick a time, back to focus. It rings when you asked it to.</p>
           </div>
         </article>
         <article class="article article-h">
-          <img class="card-img-phone" src="captures/home-focused.png" alt="Home screen focusing on a single active reminder" />
+          <img class="card-img-phone" src="captures/home-focused.png" alt="" />
           <div class="article-body">
-            <h3>One thing at a time</h3>
-            <p class="body">One big card for what's next. The rest wait in queue below.</p>
+            <h3 data-i18n="card3_title">One thing at a time</h3>
+            <p class="body" data-i18n="card3_body">One big card for what's next. The rest wait in queue below.</p>
           </div>
         </article>
         <article class="article article-h">
-          <img class="card-img-phone" src="captures/alarm-screen.png" alt="Full-screen alarm ringing with Dismiss and Snooze options" />
+          <img class="card-img-phone" src="captures/alarm-screen.png" alt="" />
           <div class="article-body">
-            <h3>"I'll do it in a bit"</h3>
-            <p class="body">Don't wait until a bit becomes never. Set a time and it comes back ringing.</p>
+            <h3 data-i18n="card4_title">"I'll do it in a bit"</h3>
+            <p class="body" data-i18n="card4_body">Don't wait until a bit becomes never. Set a time and it comes back ringing.</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- DOWNLOAD -->
     <section class="section" id="get">
-      <h2>Want it to stop slipping through?</h2>
-      <p class="lead" style="margin-top:.5rem;">Grab the beta and start catching every ask.</p>
-      <a href="https://github.com/masjames/impels/releases/latest/download/impels.apk" class="btn btn-primary" style="margin-top:1rem;">Download the beta (APK)</a>
-      <p class="small" style="margin-top:.6rem;">Android only · free while in beta · you may need to allow install from unknown sources.</p>
+      <h2 data-i18n="cta_title">Want it to stop slipping through?</h2>
+      <p class="lead" style="margin-top:.5rem;" data-i18n="cta_sub">Grab the beta and start catching every ask.</p>
+      <a href="https://github.com/masjames/impels/releases/latest/download/impels.apk" class="btn btn-primary" style="margin-top:1rem;" data-i18n="cta_btn">Download the beta (APK)</a>
+      <p class="small" style="margin-top:.6rem;" data-i18n="cta_note">Android only · free while in beta · you may need to allow install from unknown sources.</p>
     </section>
 
-    <!-- FAQ -->
     <section class="section accordion" id="faq">
-      <h2 style="margin-bottom:1rem;">Questions</h2>
-      <details open><summary>How is this different from a to-do app?</summary><p>A to-do just sits there quietly. impels rings like a full-screen alarm at the time you set, so the task is impossible to ignore.</p></details>
-      <details><summary>Does it ring even when my phone is locked?</summary><p>Yes. It uses exact alarms and a full-screen alarm that fires over the lock screen, with sound and vibration, like your clock app.</p></details>
-      <details><summary>Is it Android only?</summary><p>Yes for now. Android first, where reliable background reminders are strongest.</p></details>
-      <details><summary>How do I install the APK?</summary><p>Download it, tap the file, and allow install from unknown sources if your phone asks. It is a free beta.</p></details>
+      <h2 style="margin-bottom:1rem;" data-i18n="faq_title">Questions</h2>
+      <details open><summary data-i18n="faq1_q">How is this different from a to-do app?</summary><p data-i18n="faq1_a">A to-do just sits there quietly. impels rings like a full-screen alarm at the time you set, so the task is impossible to ignore.</p></details>
+      <details><summary data-i18n="faq2_q">Does it ring even when my phone is locked?</summary><p data-i18n="faq2_a">Yes. It uses exact alarms and a full-screen alarm that fires over the lock screen, with sound and vibration, like your clock app.</p></details>
+      <details><summary data-i18n="faq3_q">Is it Android only?</summary><p data-i18n="faq3_a">Yes for now. Android first, where reliable background reminders are strongest.</p></details>
+      <details><summary data-i18n="faq4_q">How do I install the APK?</summary><p data-i18n="faq4_a">Download it, tap the file, and allow install from unknown sources if your phone asks. It is a free beta.</p></details>
     </section>
 
-    <!-- FOOTER -->
     <footer class="site-footer">
       <span class="logo"><svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="9" y1="2.5" x2="15" y2="2.5"/><line x1="12" y1="2.5" x2="12" y2="4.5"/><circle cx="12" cy="14" r="8"/><circle cx="12" cy="10.5" r="0.6" fill="currentColor" stroke="none"/><line x1="12" y1="12.5" x2="12" y2="17"/></svg><span>impels</span></span>
-      <span class="small">by <a href="https://instagram.com/0xruzk" target="_blank" rel="noopener">0xruzk</a></span>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <span class="small" data-i18n="footer_by">by <a href="https://instagram.com/0xruzk" target="_blank" rel="noopener">0xruzk</a></span>
+        <div class="lang-btn" id="langBtnBottom" tabindex="0" role="button" aria-haspopup="true" onclick="toggleLang(this)">
+          <span class="lang-label">ID</span>
+          <span>▼</span>
+          <div class="lang-menu">
+            <div class="active" data-lang="id" onclick="switchLang('id');event.stopPropagation();">ID</div>
+            <div data-lang="en" onclick="switchLang('en');event.stopPropagation();">EN</div>
+          </div>
+        </div>
+      </div>
     </footer>
 
   </div>
-  <script>
-    (function() {
-      var lb = document.createElement('div');
-      lb.className = 'lightbox';
-      var lbi = document.createElement('img');
-      lb.appendChild(lbi);
-      document.body.appendChild(lb);
-      lb.addEventListener('click', function() { lb.classList.remove('open'); });
 
-      document.querySelectorAll('.card-img-phone').forEach(function(img) {
-        img.addEventListener('click', function(e) {
-          e.stopPropagation();
-          lbi.src = this.src;
-          lbi.alt = this.alt;
-          lb.classList.add('open');
-        });
-      });
-    })();
+  <script>
+  var translations = {
+    "meta_title": { "id": "impels \u00b7 tangkap setiap tugas, fokus, dikejar sampai beres", "en": "impels \u00b7 catch every ask, stay focused, get nagged until it's done" },
+    "nav_faq": { "id": "FAQ", "en": "FAQ" },
+    "nav_download": { "id": "Download", "en": "Download" },
+    "hero_title": { "id": "Tangkap dan pasang pengingat.", "en": "Catch and set a timer." },
+    "hero_sub": { "id": "Rekan chat, bos kirim tugas, kamu lagi fokus. Tangkap dalam dua tap, pilih waktu, dan akan berdering sampai kamu bereskan.", "en": "Coworker pings, boss drops a task, you're mid-focus. Catch it in two taps, pick a time, and it rings like an alarm until you deal with it." },
+    "hero_cta": { "id": "Download beta (APK)", "en": "Download the beta (APK)" },
+    "hero_note": { "id": "Android saja \u00b7 beta gratis \u00b7 sideload APK", "en": "Android only \u00b7 free beta \u00b7 sideload the APK" },
+    "section1_title": { "id": "Kepala Anda bukan antrean tugas yang bisa diandalkan.", "en": "Your head is not a reliable queue." },
+    "card1_title": { "id": "Tangkap cepat", "en": "Catch it fast" },
+    "card1_body": { "id": "Buka aplikasi, dua tap untuk menangkap apa pun yang baru muncul.", "en": "Open the app and you're two taps away from capturing whatever just came up." },
+    "card2_title": { "id": "Rekan minta, bos kirim tugas", "en": "Coworker asks, boss drops" },
+    "card2_body": { "id": "Simpan, atur waktu, kembali fokus. Berdering sesuai jadwal.", "en": "Park it, pick a time, back to focus. It rings when you asked it to." },
+    "card3_title": { "id": "Satu hal dalam satu waktu", "en": "One thing at a time" },
+    "card3_body": { "id": "Satu kartu besar untuk tugas selanjutnya. Sisanya antre di bawah.", "en": "One big card for what's next. The rest wait in queue below." },
+    "card4_title": { "id": "\"Nanti aja deh\"", "en": "\"I'll do it in a bit\"" },
+    "card4_body": { "id": "Jangan tunggu sampai nanti jadi tidak pernah. Atur waktu dan tugas akan kembali berdering.", "en": "Don't wait until a bit becomes never. Set a time and it comes back ringing." },
+    "cta_title": { "id": "Mau berhenti kehilangan tugas?", "en": "Want it to stop slipping through?" },
+    "cta_sub": { "id": "Ambil beta dan mulai tangkap setiap tugas.", "en": "Grab the beta and start catching every ask." },
+    "cta_btn": { "id": "Download beta (APK)", "en": "Download the beta (APK)" },
+    "cta_note": { "id": "Android saja \u00b7 gratis selama beta \u00b7 mungkin perlu izinkan instal dari sumber tidak dikenal", "en": "Android only \u00b7 free while in beta \u00b7 you may need to allow install from unknown sources." },
+    "faq_title": { "id": "Pertanyaan", "en": "Questions" },
+    "faq1_q": { "id": "Apa bedanya dengan aplikasi to-do?", "en": "How is this different from a to-do app?" },
+    "faq1_a": { "id": "To-do cuma diam saja. impels berdering full-screen di waktu yang Anda atur, tugas tidak mungkin diabaikan.", "en": "A to-do just sits there quietly. impels rings like a full-screen alarm at the time you set, so the task is impossible to ignore." },
+    "faq2_q": { "id": "Apakah berdering meski HP terkunci?", "en": "Does it ring even when my phone is locked?" },
+    "faq2_a": { "id": "Ya. Menggunakan alarm presisi dan layar penuh yang muncul di atas layar kunci, dengan suara dan getaran.", "en": "Yes. It uses exact alarms and a full-screen alarm that fires over the lock screen, with sound and vibration, like your clock app." },
+    "faq3_q": { "id": "Hanya Android?", "en": "Is it Android only?" },
+    "faq3_a": { "id": "Ya untuk sekarang. Android dulu, karena pengingat latar paling andal di sini.", "en": "Yes for now. Android first, where reliable background reminders are strongest." },
+    "faq4_q": { "id": "Bagaimana cara install APK?", "en": "How do I install the APK?" },
+    "faq4_a": { "id": "Download file, tap, dan izinkan instal dari sumber tidak dikenal jika diminta. Gratis beta.", "en": "Download it, tap the file, and allow install from unknown sources if your phone asks. It is a free beta." },
+    "footer_by": { "id": "oleh <a href=\"https://instagram.com/0xruzk\" target=\"_blank\" rel=\"noopener\">0xruzk</a>", "en": "by <a href=\"https://instagram.com/0xruzk\" target=\"_blank\" rel=\"noopener\">0xruzk</a>" }
+  };
+
+  function switchLang(locale) {
+    document.documentElement.lang = locale;
+    localStorage.setItem('impels_lang', locale);
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      if (translations[key] && translations[key][locale]) {
+        el.innerHTML = translations[key][locale];
+      }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n-placeholder');
+      if (translations[key] && translations[key][locale]) {
+        el.placeholder = translations[key][locale];
+      }
+    });
+    document.querySelectorAll('.lang-label').forEach(function(el) {
+      el.textContent = locale.toUpperCase();
+    });
+    document.querySelectorAll('.lang-menu div').forEach(function(el) {
+      el.classList.toggle('active', el.getAttribute('data-lang') === locale);
+    });
+  }
+
+  function toggleLang(btn) {
+    btn.classList.toggle('open');
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.lang-btn')) {
+      document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('open'); });
+    }
+  });
+
+  var saved = localStorage.getItem('impels_lang') || 'en';
+  switchLang(saved);
   </script>
 </body>
 </html>
