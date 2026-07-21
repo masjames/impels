@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.impels.domain.IntervalOption
@@ -63,7 +64,7 @@ fun EditScreen(vm: EditViewModel, onClose: () -> Unit) {
                 singleLine = true,
                 isError = s.error != null,
                 supportingText = { s.error?.let { Text(it) } },
-                modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+                modifier = Modifier.fillMaxWidth().testTag("field_what").focusRequester(focusRequester),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     cursorColor = MaterialTheme.colorScheme.primary
@@ -77,7 +78,7 @@ fun EditScreen(vm: EditViewModel, onClose: () -> Unit) {
                     label = { Text("Who asked (optional)") },
                     placeholder = { Text("Coworker, boss, me...") },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("field_who"),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         cursorColor = MaterialTheme.colorScheme.primary
@@ -87,7 +88,8 @@ fun EditScreen(vm: EditViewModel, onClose: () -> Unit) {
                     listOf("Boss", "Coworker", "Me").forEach { who ->
                         AssistChip(
                             onClick = { vm.onFromWho(who) },
-                            label = { Text(who) }
+                            label = { Text(who) },
+                            modifier = Modifier.testTag("chip_who_$who")
                         )
                     }
                 }
@@ -107,7 +109,8 @@ fun EditScreen(vm: EditViewModel, onClose: () -> Unit) {
                         FilterChip(
                             selected = s.intervalMinutes == opt.minutes,
                             onClick = { vm.onInterval(opt.minutes) },
-                            label = { Text(opt.label.removePrefix("Every ")) }
+                            label = { Text(opt.label.removePrefix("Every ")) },
+                            modifier = Modifier.testTag("chip_int_${opt.minutes}")
                         )
                     }
                 }
@@ -118,7 +121,7 @@ fun EditScreen(vm: EditViewModel, onClose: () -> Unit) {
             Button(
                 onClick = { vm.save(focus = false, onDone = onClose) },
                 enabled = !s.saving,
-                modifier = Modifier.fillMaxWidth().height(48.dp)
+                modifier = Modifier.fillMaxWidth().height(48.dp).testTag("btn_save")
             ) {
                 Text(
                     if (s.isExisting) "Save" else "Catch it",
@@ -130,7 +133,7 @@ fun EditScreen(vm: EditViewModel, onClose: () -> Unit) {
                 OutlinedButton(
                     onClick = { vm.save(focus = true, onDone = onClose) },
                     enabled = !s.saving,
-                    modifier = Modifier.fillMaxWidth().height(48.dp)
+                    modifier = Modifier.fillMaxWidth().height(48.dp).testTag("btn_save_focus")
                 ) {
                     Text("Save & focus", fontWeight = FontWeight.SemiBold)
                 }

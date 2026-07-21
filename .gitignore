@@ -18,3 +18,4 @@ local.properties
 # Keep source APKs out of git (distribute via GitHub Releases)
 *.apk
 *.aab
+.capture/

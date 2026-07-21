@@ -16,6 +16,7 @@ android {
         versionCode = 1
         versionName = "0.1.0-beta"
         vectorDrawables { useSupportLibrary = true }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures { compose = true }
@@ -53,4 +54,15 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.workmanager)
     debugImplementation(libs.androidx.ui.tooling)
+
+    // Instrumented UI test that drives the app via testTags to capture each
+    // screen state deterministically (headless screenshot pipeline). See
+    // CaptureFlowTest + ../../run-instrumented-capture.sh and HANDOFF.md.
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:core-ktx:1.6.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

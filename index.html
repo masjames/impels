@@ -11,21 +11,28 @@
   <script src="https://fast.wistia.com/embed/7chhqrosi9.js" async type="module"></script>
   <style>wistia-player[media-id='7chhqrosi9']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/7chhqrosi9/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style>
   <style>
-    /* v3 High Accessibility: video hero + card grid, dark high-contrast */
     .hero { text-align:center; padding:3rem 0; border-bottom:1px solid var(--border); }
     .hero .lead { margin:1rem auto 0; }
     .video-wrap { max-width:820px; margin:0 auto 2rem; border-radius:var(--radius-lg); overflow:hidden; }
-    .cat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
     .article {
       background:var(--muted-bg); border:1px solid var(--border); border-radius:var(--radius-lg);
       padding:1rem; transition:background .15s ease, color .15s ease, border-color .15s ease;
     }
-    .card-img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:var(--radius);
-      display:block; margin-bottom:.85rem; background:#0d1014; }
-    /* hover: flip to light surface with dark text */
-    .article:hover { background:#f4f2ec; border-color:#f4f2ec; color:#14110a; }
-    .article:hover h3, .article:hover .body { color:#14110a; }
-    @media(max-width:820px){ .cat-grid{grid-template-columns:1fr;} }
+    /* screens: 2-column grid */
+    .screens-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .article-h { display:flex; align-items:center; gap:1.5rem; padding:1rem; }
+    .card-img-phone { width:130px; height:auto; flex-shrink:0; border-radius:var(--radius);
+      object-fit:contain; background:#0d1014; cursor:pointer; }
+    .article-body { flex:1; }
+    .article-h:hover { background:#1e2530; border-color:var(--border); }
+    @media(max-width:640px){ .screens-grid{grid-template-columns:1fr;} .article-h{flex-direction:column;text-align:center;} .card-img-phone{width:110px;} }
+    /* lightbox */
+    .lightbox { display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+      background:rgba(0,0,0,.85); z-index:9999; align-items:center; justify-content:center;
+      cursor:pointer; }
+    .lightbox.open { display:flex; }
+    .lightbox img { max-width:90vw; max-height:90vh; border-radius:var(--radius);
+      box-shadow:0 8px 40px rgba(0,0,0,.5); }
     /* a11y: strong visible focus ring on every interactive element */
     a:focus-visible, .input:focus-visible, summary:focus-visible { outline:3px solid var(--primary); outline-offset:2px; }
   </style>
@@ -53,7 +60,7 @@
     <!-- HERO -->
     <section class="hero" id="top">
       <div class="video-wrap"><wistia-player media-id="7chhqrosi9" aspect="1.7777777777777777"></wistia-player></div>
-      <h1>Catch every ask.<br /> Set a timer you can't ignore.</h1>
+      <h1>Catch and set a timer.</h1>
       <p class="lead">Coworker pings, boss drops a task, you're mid-focus. Catch it in two taps, pick a time, and it rings like an alarm until you deal with it.</p>
       <a href="https://github.com/masjames/impels/releases/latest/download/impels.apk" class="btn btn-primary" style="margin-top:1.5rem;">Download the beta (APK)</a>
       <p class="small" style="margin-top:.6rem;">Android only · free beta · sideload the APK</p>
@@ -62,10 +69,35 @@
     <!-- PROBLEM -->
     <section class="section" id="field">
       <h2>Your head is not a reliable queue.</h2>
-      <div class="cat-grid" style="margin-top:1.5rem;">
-        <article class="article"><img class="card-img" src="assets/images/coworker-interrupt.webp" alt="A person deep in focus at a laptop while a coworker's request is caught mid-air" /><h3>Coworker asks mid-task</h3><p class="body">Catch it before it evaporates. Two taps, back to work.</p></article>
-        <article class="article"><img class="card-img" src="assets/images/boss-drops-task.webp" alt="A hand dropping a task card into a queue tray marked with a clock" /><h3>Boss drops a task</h3><p class="body">Park it, pick a time. It rings when you asked it to.</p></article>
-        <article class="article"><img class="card-img" src="assets/images/do-it-in-a-bit.webp" alt="A task that rings like an alarm until you deal with it" /><h3>"I'll do it in a bit"</h3><p class="body">A bit becomes never. Set a time and it comes back ringing.</p></article>
+      <div class="screens-grid" style="margin-top:1.5rem;">
+        <article class="article article-h">
+          <img class="card-img-phone" src="captures/home-empty.png" alt="Empty home screen ready to catch an ask" />
+          <div class="article-body">
+            <h3>Catch it fast</h3>
+            <p class="body">Open the app and you're two taps away from capturing whatever just came up.</p>
+          </div>
+        </article>
+        <article class="article article-h">
+          <img class="card-img-phone" src="captures/add-form-filled.png" alt="Add reminder form filled with 'Review Q3 report' from 'Boss'" />
+          <div class="article-body">
+            <h3>Coworker asks, boss drops</h3>
+            <p class="body">Park it, pick a time, back to focus. It rings when you asked it to.</p>
+          </div>
+        </article>
+        <article class="article article-h">
+          <img class="card-img-phone" src="captures/home-focused.png" alt="Home screen focusing on a single active reminder" />
+          <div class="article-body">
+            <h3>One thing at a time</h3>
+            <p class="body">One big card for what's next. The rest wait in queue below.</p>
+          </div>
+        </article>
+        <article class="article article-h">
+          <img class="card-img-phone" src="captures/alarm-screen.png" alt="Full-screen alarm ringing with Dismiss and Snooze options" />
+          <div class="article-body">
+            <h3>"I'll do it in a bit"</h3>
+            <p class="body">Don't wait until a bit becomes never. Set a time and it comes back ringing.</p>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -93,5 +125,24 @@
     </footer>
 
   </div>
+  <script>
+    (function() {
+      var lb = document.createElement('div');
+      lb.className = 'lightbox';
+      var lbi = document.createElement('img');
+      lb.appendChild(lbi);
+      document.body.appendChild(lb);
+      lb.addEventListener('click', function() { lb.classList.remove('open'); });
+
+      document.querySelectorAll('.card-img-phone').forEach(function(img) {
+        img.addEventListener('click', function(e) {
+          e.stopPropagation();
+          lbi.src = this.src;
+          lbi.alt = this.alt;
+          lb.classList.add('open');
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

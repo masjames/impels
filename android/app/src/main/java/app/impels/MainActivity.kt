@@ -14,9 +14,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import app.impels.ui.edit.EditScreen
 import app.impels.ui.edit.EditViewModel
 import app.impels.ui.home.HomeScreen
@@ -51,7 +55,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             ImpelsTheme {
                 val nav = rememberNavController()
-                NavHost(navController = nav, startDestination = "home") {
+                // Expose Compose testTags as resource-ids so uiautomator (and the
+                // headless capture script) can find controls reliably. See HANDOFF.md.
+                @OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+                NavHost(
+                    navController = nav,
+                    startDestination = "home",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .semantics { testTagsAsResourceId = true }
+                ) {
 
                     composable("home") {
                         val vm: HomeViewModel = viewModel(factory = HomeViewModel.Factory(container.repository))

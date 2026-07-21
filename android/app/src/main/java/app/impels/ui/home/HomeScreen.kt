@@ -23,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -70,7 +71,7 @@ fun HomeScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = onSettings) {
+                    IconButton(onClick = onSettings, modifier = Modifier.testTag("btn_settings")) {
                         Icon(Icons.Filled.Settings, contentDescription = "Settings")
                     }
                 }
@@ -79,6 +80,7 @@ fun HomeScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onAdd,
+                modifier = Modifier.testTag("fab_add"),
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                 text = { Text("Get it down") }
             )
@@ -131,7 +133,7 @@ fun HomeScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Spacer(Modifier.height(24.dp))
-                            Button(onClick = onAdd) { Text("Get it down") }
+                            Button(onClick = onAdd, modifier = Modifier.testTag("empty_add")) { Text("Get it down") }
                         }
                     }
                 }
@@ -172,7 +174,7 @@ fun HomeScreen(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Button(onClick = { vm.markDone(f.id) }) { Text("Done") }
+                                Button(onClick = { vm.markDone(f.id) }, modifier = Modifier.testTag("btn_done")) { Text("Done") }
                                 TextButton(onClick = { vm.snooze(f.id, defaultSnooze) }) {
                                     Text("Snooze")
                                 }
